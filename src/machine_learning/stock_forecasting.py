@@ -1,3 +1,10 @@
+# Ajouté au début du script
+import sys
+
+
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import pandas as pd
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
@@ -31,7 +38,7 @@ try:
     collection = db["stock_prices"]
     print(f'Documents found: {collection.count_documents({})}')
 except Exception as e:
-    print(f"❌ Connection Error: {e}")
+    print(f"Connection Error: {e}")
     exit()
 
 print("Fetching data (Close + Volume)...")
@@ -136,8 +143,8 @@ for cp_scale, seas_scale, seas_mode, cp_range in product(
 p_mape = mape(val_orig, best_prophet_pred)
 p_rmse = rmse(val_orig, best_prophet_pred)
 
-print(f"\n🏆 Best Prophet MAPE: {p_mape:.2f}%")
-print(f"🏆 Best Prophet RMSE: ${p_rmse:.2f}")
+print(f"\nBest Prophet MAPE: {p_mape:.2f}%")
+print(f"Best Prophet RMSE: ${p_rmse:.2f}")
 print(f"Best Parameters: {best_prophet_params}")
 
 # ==========================================
@@ -205,8 +212,8 @@ for lags, lags_cov, n_est, depth, lr in product(
 x_mape = mape(val_orig, best_xgb_pred)
 x_rmse = rmse(val_orig, best_xgb_pred)
 
-print(f"\n🏆 Best XGBoost MAPE: {x_mape:.2f}%")
-print(f"🏆 Best XGBoost RMSE: ${x_rmse:.2f}")
+print(f"\n Best XGBoost MAPE: {x_mape:.2f}%")
+print(f" Best XGBoost RMSE: ${x_rmse:.2f}")
 print(f"Best Parameters: {best_xgb_params}")
 
 # ==========================================
@@ -260,7 +267,7 @@ for prophet_factor in weight_steps:
 ensemble_rmse = rmse(val_orig, best_ensemble_pred)
 
 print("\n" + "="*60)
-print("🏆 BEST ENSEMBLE WEIGHTS FOUND!")
+print(" BEST ENSEMBLE WEIGHTS FOUND!")
 print("="*60)
 print(f"Prophet Factor: {best_prophet_factor:.3f}")
 print(f"XGBoost Factor: {best_xgb_factor:.3f}")
@@ -278,11 +285,11 @@ print(f"XGBoost (Tuned)  -> MAPE: {x_mape:.2f}% | RMSE: ${x_rmse:.2f}")
 print(f"Ensemble (Tuned) -> MAPE: {best_ensemble_mape:.2f}% | RMSE: ${ensemble_rmse:.2f}")
 
 if best_ensemble_mape < p_mape and best_ensemble_mape < x_mape:
-    print("\n🎉 Ensemble model outperforms both individual models!")
+    print("\n Ensemble model outperforms both individual models!")
 elif p_mape < x_mape:
-    print(f"\n🏆 Prophet is the winner (but ensemble helps: {best_ensemble_mape:.2f}% vs {p_mape:.2f}%)")
+    print(f"\n Prophet is the winner (but ensemble helps: {best_ensemble_mape:.2f}% vs {p_mape:.2f}%)")
 else:
-    print(f"\n🏆 XGBoost is the winner (but ensemble helps: {best_ensemble_mape:.2f}% vs {x_mape:.2f}%)")
+    print(f"\n XGBoost is the winner (but ensemble helps: {best_ensemble_mape:.2f}% vs {x_mape:.2f}%)")
 
 # ==========================================
 # 9. FINAL FORECAST (NEXT 3 DAYS)
@@ -378,8 +385,8 @@ ax2.set_ylabel('Ensemble MAPE (%)', fontsize=11)
 ax2.legend(loc='best', fontsize=10)
 ax2.grid(True, alpha=0.3)
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 # ==========================================
 # 11. SAVE BEST PARAMETERS
@@ -423,4 +430,4 @@ print(f"  - Prophet alone: {p_mape:.2f}% MAPE")
 print(f"  - XGBoost alone: {x_mape:.2f}% MAPE")
 print(f"  - Ensemble: {best_ensemble_mape:.2f}% MAPE")
 print(f"\nEnsemble uses: {best_prophet_factor:.1%} Prophet + {best_xgb_factor:.1%} XGBoost")
-print("\nDone! 🎉")
+print("\nDone! ")

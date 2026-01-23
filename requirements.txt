@@ -8,3 +8,10 @@ torch
 dotenv
 scikit-learn
 xgboost
+nltk
+langchain-groq
+langchain
+requests
+schedule
+markdown
+xhtml2pdf
